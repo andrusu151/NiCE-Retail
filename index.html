@@ -551,8 +551,40 @@
 <script src="https://github.com/Cognigy/Webchat/releases/latest/download/webchat.js"></script>
 <script>
   initWebchat(
-    "https://endpoint-trial.cognigy.ai/81b521b904969d67740201d66deefce57a364f1a18ce36b7e8889740546a4250"
+    "https://endpoint-trial.cognigy.ai/750e988f8e4f7f7122766a3aa0bb95b05a6ac16a2f7a209daa754768fd7c3082"
   );
+</script>
+
+<!-- Click-to-call (voice) widget -->
+<script src="https://github.com/Cognigy/click-to-call-widget/releases/latest/download/webRTCWidget.js"></script>
+<script>
+  addEventListener("load", (event) => {
+    if (!window.initWebRTCWidget) return;
+
+    // Space (px) to shift the call button left so it sits beside the webchat bubble.
+    // Increase this if the two icons overlap, decrease it if the gap is too wide.
+    var SHIFT_LEFT = 84;
+
+    var before = new Set(document.body.querySelectorAll("*"));
+    window.initWebRTCWidget("wss://endpoint-trial.cognigy.ai/c58153e58ebf22d1a40ea2e3813ca8ac8a65f62fd6d0d76795ed35aec56e3b58/voiceGateway");
+
+    function place() {
+      document.body.querySelectorAll("*").forEach(function (el) {
+        if (before.has(el) || el.dataset.nicePlaced) return;
+        if (el.parentElement && el.parentElement.closest("[data-nice-placed]")) return;
+        if (getComputedStyle(el).position !== "fixed") return;
+        var r = el.getBoundingClientRect();
+        if (!r.width || r.left < innerWidth / 2 || r.top < innerHeight / 2) return; // bottom-right widgets only
+        el.dataset.nicePlaced = "1";
+        el.style.setProperty("right", (innerWidth - r.right + SHIFT_LEFT) + "px", "important");
+        el.style.setProperty("left", "auto", "important");
+      });
+    }
+    place();
+    var obs = new MutationObserver(place);
+    obs.observe(document.body, { childList: true, subtree: true });
+    setTimeout(function () { obs.disconnect(); }, 10000);
+  });
 </script>
 
 </body>

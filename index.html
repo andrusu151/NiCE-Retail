@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NiCE Retail — Shopping that knows you</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink:    #14122b;
+      --ink-2:  #2a2750;
+      --muted:  #6c6a86;
+      --cream:  #fff8f0;
+      --paper:  #ffffff;
+      --coral:  #ff5c4d;
+      --coral-d:#e8453a;
+      --sun:    #ffc933;
+      --blue:   #3694fc;
+      --mint:   #a8eddc;
+      --lilac:  #e9e4ff;
+      --peach:  #ffe3d6;
+      --sky:    #dcefff;
+      --lemon:  #fff1bf;
+      --line:   rgba(20,18,43,0.10);
+      --sans: 'Be Vietnam Pro', Arial, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--sans); background: var(--cream); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+
+    /* ── ANNOUNCE ── */
+    .announce { background: var(--ink); color: #fff; text-align: center; font-size: 13px; font-weight: 500; padding: 10px 16px; }
+    .announce b { color: var(--sun); }
+
+    /* ── NAV ── */
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(255,248,240,0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--line); }
+    nav .wrap { height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo svg { height: 26px; width: auto; }
+    .logo i { width: 1.5px; height: 22px; background: var(--line); display: block; }
+    .logo span { font-size: 14px; font-weight: 700; color: var(--coral); }
+    .nav-links { display: flex; gap: 30px; list-style: none; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); transition: color .2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .search { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 9px 16px; font-size: 13px; color: var(--muted); min-width: 190px; }
+    .search svg { width: 15px; height: 15px; stroke: var(--muted); fill: none; stroke-width: 2; stroke-linecap: round; }
+    .cart-btn { position: relative; background: var(--ink); color: #fff; border: 0; border-radius: 999px; padding: 11px 20px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: transform .15s; }
+    .cart-btn:hover { transform: translateY(-1px); }
+    .cart-btn .count { background: var(--coral); color: #fff; min-width: 22px; height: 22px; border-radius: 99px; display: grid; place-items: center; font-size: 12px; padding: 0 6px; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 16px 32px; border-radius: 999px; font-size: 15px; font-weight: 600; border: 0; cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-coral { background: var(--coral); color: #fff; box-shadow: 0 10px 28px rgba(255,92,77,0.38); }
+    .btn-coral:hover { background: var(--coral-d); }
+    .btn-ink { background: var(--ink); color: #fff; }
+    .btn-out { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+    .btn-out:hover { background: var(--ink); color: #fff; }
+
+    /* ── HERO ── */
+    .hero { position: relative; padding: 72px 0 96px; overflow: hidden; }
+    .hero .wrap { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center; }
+    .pill { display: inline-flex; gap: 10px; align-items: center; background: var(--lemon); border-radius: 999px; padding: 7px 16px; font-size: 13px; font-weight: 600; margin-bottom: 26px; }
+    .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--coral); animation: blink 1.6s infinite; }
+    @keyframes blink { 50% { opacity: .25; } }
+    h1 { font-size: 78px; line-height: 1; letter-spacing: -0.04em; font-weight: 800; margin-bottom: 24px; }
+    h1 .u { position: relative; display: inline-block; z-index: 1; color: var(--coral); }
+    h1 .u::after { content: ''; position: absolute; left: -2%; right: -2%; bottom: 4px; height: 16px; background: var(--sun); z-index: -1; border-radius: 6px; transform: rotate(-1deg); opacity: .85; }
+    .lead { font-size: 19px; font-weight: 300; line-height: 1.7; color: var(--muted); max-width: 490px; margin-bottom: 36px; }
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 40px; }
+    .hero-proof { display: flex; align-items: center; gap: 14px; font-size: 14px; color: var(--muted); }
+    .faces { display: flex; }
+    .faces span { width: 38px; height: 38px; border-radius: 50%; border: 3px solid var(--cream); margin-left: -10px; display: grid; place-items: center; font-size: 12px; font-weight: 700; color: var(--ink); }
+    .faces span:first-child { margin-left: 0; }
+    .hero-proof b { color: var(--ink); }
+
+    .collage { position: relative; height: 560px; }
+    .blob { position: absolute; border-radius: 50%; }
+    .b1 { width: 460px; height: 460px; background: var(--peach); right: 20px; top: 40px; }
+    .b2 { width: 180px; height: 180px; background: var(--sun); right: 0; top: 0; }
+    .b3 { width: 120px; height: 120px; background: var(--mint); left: 10px; bottom: 30px; }
+    .pc { position: absolute; background: #fff; border-radius: 26px; padding: 16px; box-shadow: 0 24px 50px rgba(20,18,43,0.14); transition: transform .3s; }
+    .pc:hover { transform: translateY(-6px) rotate(0) !important; }
+    .pc .img { border-radius: 18px; display: grid; place-items: center; font-size: 84px; }
+    .pc .nm { font-size: 14px; font-weight: 600; margin-top: 12px; }
+    .pc .pr { font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; margin-top: 2px; }
+    .pc .pr b { color: var(--coral); }
+    .pc1 { width: 240px; left: 40px; top: 20px; transform: rotate(-5deg); }
+    .pc1 .img { height: 200px; background: var(--sky); }
+    .pc2 { width: 230px; right: 0; top: 120px; transform: rotate(4deg); }
+    .pc2 .img { height: 190px; background: var(--lilac); }
+    .pc3 { width: 220px; left: 30px; bottom: -20px; transform: rotate(2deg); }
+    .pc3 .img { height: 150px; background: var(--lemon); }
+    .sticker { position: absolute; right: 70px; bottom: 60px; width: 112px; height: 112px; border-radius: 50%; background: var(--coral); color: #fff; display: grid; place-items: center; text-align: center; font-weight: 800; font-size: 13px; line-height: 1.2; transform: rotate(12deg); box-shadow: 0 14px 30px rgba(255,92,77,0.4); z-index: 3; }
+    .sticker b { display: block; font-size: 30px; }
+
+    /* ── MARQUEE ── */
+    .marquee { background: var(--ink); color: #fff; overflow: hidden; padding: 18px 0; }
+    .marquee-track { display: flex; gap: 48px; width: max-content; animation: slide 30s linear infinite; font-size: 16px; font-weight: 600; }
+    .marquee-track span { display: flex; align-items: center; gap: 48px; white-space: nowrap; }
+    .marquee-track span::after { content: '✦'; color: var(--sun); }
+    @keyframes slide { to { transform: translateX(-50%); } }
+
+    section { padding: 100px 0; }
+    .kicker { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--coral); margin-bottom: 12px; }
+    h2 { font-size: 48px; line-height: 1.06; letter-spacing: -0.035em; font-weight: 800; }
+    .sub { font-size: 17px; font-weight: 300; line-height: 1.7; color: var(--muted); max-width: 520px; margin-top: 14px; }
+    .head-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 48px; }
+
+    /* ── CATEGORIES ── */
+    .cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .cat { position: relative; border-radius: 30px; padding: 28px; height: 340px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; transition: transform .25s; cursor: pointer; }
+    .cat:hover { transform: translateY(-6px); }
+    .cat .em { position: absolute; top: 24px; right: 18px; font-size: 120px; line-height: 1; transition: transform .35s; }
+    .cat:hover .em { transform: scale(1.1) rotate(-6deg); }
+    .cat h3 { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
+    .cat p { font-size: 13px; color: rgba(20,18,43,0.65); margin: 4px 0 14px; }
+    .cat .go { width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; font-size: 18px; }
+    .c1 { background: var(--lilac); } .c2 { background: var(--sky); } .c3 { background: var(--lemon); } .c4 { background: var(--peach); }
+
+    /* ── PRODUCTS ── */
+    .products-sec { background: #fff; }
+    .chips { display: flex; gap: 10px; flex-wrap: wrap; }
+    .chip { border: 1.5px solid var(--line); background: transparent; border-radius: 999px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all .2s; }
+    .chip:hover { border-color: var(--ink); color: var(--ink); }
+    .chip.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+    .prod { transition: opacity .25s, transform .25s; }
+    .prod .pimg { position: relative; border-radius: 26px; aspect-ratio: 1; display: grid; place-items: center; font-size: 104px; overflow: hidden; transition: transform .3s; }
+    .prod:hover .pimg { transform: scale(0.98); }
+    .prod .tag { position: absolute; top: 14px; left: 14px; background: #fff; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 5px 12px; }
+    .prod .tag.sale { background: var(--coral); color: #fff; }
+    .prod .add { position: absolute; left: 14px; right: 14px; bottom: 14px; background: var(--ink); color: #fff; border: 0; border-radius: 14px; padding: 13px; font-size: 14px; font-weight: 600; cursor: pointer; transform: translateY(70px); opacity: 0; transition: transform .25s, opacity .25s, background .2s; }
+    .prod:hover .add, .prod .add:focus { transform: translateY(0); opacity: 1; }
+    .prod .add:hover { background: var(--coral); }
+    .prod .meta { display: flex; justify-content: space-between; gap: 10px; margin-top: 16px; }
+    .prod h4 { font-size: 16px; font-weight: 600; }
+    .prod .cat-l { font-size: 13px; color: var(--muted); margin-top: 3px; }
+    .prod .price { font-size: 16px; font-weight: 700; text-align: right; }
+    .prod .price s { display: block; font-size: 12px; font-weight: 400; color: var(--muted); }
+    .prod .stars { color: var(--sun); font-size: 12px; letter-spacing: 1px; margin-top: 3px; }
+    .prod.hide { display: none; }
+
+    /* ── PROMISE ── */
+    .promise { background: var(--ink); color: #fff; position: relative; overflow: hidden; }
+    .promise::before { content: ''; position: absolute; right: -160px; top: -160px; width: 520px; height: 520px; border-radius: 50%; background: radial-gradient(circle, rgba(255,92,77,0.4), transparent 65%); }
+    .promise .wrap { position: relative; }
+    .promise .sub { color: rgba(255,255,255,0.65); }
+    .pgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 56px; }
+    .pcard { border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.05); border-radius: 28px; padding: 34px; }
+    .pcard .ic { width: 58px; height: 58px; border-radius: 18px; display: grid; place-items: center; font-size: 28px; margin-bottom: 22px; }
+    .pcard h3 { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+    .pcard p { font-size: 14px; line-height: 1.7; font-weight: 300; color: rgba(255,255,255,0.65); }
+    .pcard .big { font-size: 44px; font-weight: 800; letter-spacing: -0.03em; color: var(--sun); margin-top: 18px; }
+
+    /* ── LOYALTY ── */
+    .loyal { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .perks { list-style: none; margin-top: 32px; display: grid; gap: 18px; }
+    .perks li { display: flex; gap: 16px; align-items: flex-start; }
+    .perks .n { flex-shrink: 0; width: 38px; height: 38px; border-radius: 12px; background: var(--sun); display: grid; place-items: center; font-weight: 800; }
+    .perks b { display: block; font-size: 16px; margin-bottom: 3px; }
+    .perks span { font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.6; }
+    .member { position: relative; border-radius: 34px; padding: 36px; background: linear-gradient(145deg, var(--coral), #ff8a5c); color: #fff; box-shadow: 0 34px 70px rgba(255,92,77,0.35); transform: rotate(-2deg); }
+    .member::after { content: ''; position: absolute; right: -50px; bottom: -70px; width: 220px; height: 220px; border-radius: 50%; background: rgba(255,255,255,0.15); }
+    .member .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; font-size: 13px; font-weight: 600; }
+    .member .top .tier { background: rgba(255,255,255,0.22); padding: 6px 14px; border-radius: 99px; }
+    .member .pts { font-size: 64px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+    .member .pts small { font-size: 18px; font-weight: 500; opacity: .85; letter-spacing: 0; }
+    .member .nxt { font-size: 13px; margin: 8px 0 14px; opacity: .9; }
+    .member .bar { height: 10px; background: rgba(255,255,255,0.28); border-radius: 99px; overflow: hidden; }
+    .member .bar i { display: block; height: 100%; width: 72%; background: #fff; border-radius: 99px; }
+    .member .who { margin-top: 28px; font-size: 14px; font-weight: 600; }
+    .member .who span { opacity: .8; font-weight: 400; }
+
+    /* ── REVIEWS ── */
+    .reviews { background: #fff; }
+    .rgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .rev { border-radius: 28px; padding: 32px; }
+    .rev:nth-child(1) { background: var(--lilac); } .rev:nth-child(2) { background: var(--lemon); } .rev:nth-child(3) { background: var(--sky); }
+    .rev .st { color: #f59e0b; letter-spacing: 3px; font-size: 14px; margin-bottom: 14px; }
+    .rev p { font-size: 17px; line-height: 1.6; font-weight: 500; margin-bottom: 24px; }
+    .rev .by { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+    .rev .av { width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+    .rev .by span { display: block; font-size: 12px; color: var(--muted); }
+
+    /* ── NEWSLETTER ── */
+    .news { padding: 100px 0; }
+    .news-box { position: relative; overflow: hidden; border-radius: 40px; background: var(--sun); padding: 72px 56px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; }
+    .news-box::after { content: '🎁'; position: absolute; right: -10px; bottom: -40px; font-size: 220px; opacity: .18; transform: rotate(-12deg); }
+    .news-box h2 { font-size: 44px; margin-bottom: 12px; }
+    .news-box p { font-size: 16px; font-weight: 400; line-height: 1.65; color: rgba(20,18,43,0.75); }
+    .form { position: relative; z-index: 2; display: flex; background: #fff; border-radius: 999px; padding: 7px; box-shadow: 0 14px 34px rgba(20,18,43,0.14); }
+    .form input { flex: 1; min-width: 0; border: 0; outline: 0; padding: 0 20px; font-family: inherit; font-size: 15px; background: transparent; }
+    .form .btn { padding: 14px 26px; }
+    .form-msg { position: relative; z-index: 2; font-size: 13px; margin-top: 12px; font-weight: 600; min-height: 18px; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--ink); color: rgba(255,255,255,0.65); padding: 72px 0 32px; }
+    .f-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 52px; }
+    footer .logo i { background: rgba(255,255,255,0.2); }
+    .f-brand p { font-size: 14px; font-weight: 300; line-height: 1.7; max-width: 280px; margin-top: 18px; }
+    .f-col h5 { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--sun); margin-bottom: 20px; }
+    .f-col ul { list-style: none; display: grid; gap: 12px; }
+    .f-col a { font-size: 14px; font-weight: 300; transition: color .2s; }
+    .f-col a:hover { color: #fff; }
+    .f-bot { border-top: 1px solid rgba(255,255,255,0.12); padding-top: 26px; display: flex; justify-content: space-between; font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 300; }
+
+    /* ── CART DRAWER ── */
+    .scrim { position: fixed; inset: 0; background: rgba(20,18,43,0.5); opacity: 0; pointer-events: none; transition: opacity .3s; z-index: 300; }
+    .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 420px; max-width: 100%; background: #fff; z-index: 301; transform: translateX(100%); transition: transform .35s cubic-bezier(.2,.8,.2,1); display: flex; flex-direction: column; visibility: hidden; }
+    body.cart-open .scrim { opacity: 1; pointer-events: auto; }
+    body.cart-open .drawer { transform: none; visibility: visible; box-shadow: -20px 0 60px rgba(20,18,43,0.25); }
+    .d-head { display: flex; justify-content: space-between; align-items: center; padding: 24px 28px; border-bottom: 1px solid var(--line); }
+    .d-head h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+    .d-x { width: 38px; height: 38px; border-radius: 50%; border: 0; background: var(--cream); font-size: 20px; cursor: pointer; }
+    .ship { padding: 18px 28px; background: var(--cream); font-size: 13px; font-weight: 500; }
+    .ship .bar { height: 8px; background: rgba(20,18,43,0.1); border-radius: 99px; margin-top: 10px; overflow: hidden; }
+    .ship .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--coral), var(--sun)); border-radius: 99px; transition: width .4s; }
+    .d-items { flex: 1; overflow-y: auto; padding: 8px 28px; }
+    .empty { text-align: center; padding: 70px 0; color: var(--muted); font-size: 15px; }
+    .empty span { display: block; font-size: 56px; margin-bottom: 12px; }
+    .ci { display: flex; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); align-items: center; }
+    .ci .th { width: 72px; height: 72px; border-radius: 18px; display: grid; place-items: center; font-size: 38px; flex-shrink: 0; }
+    .ci .in { flex: 1; min-width: 0; }
+    .ci .in b { display: block; font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+    .ci .in span { font-size: 13px; color: var(--muted); }
+    .qty { display: inline-flex; align-items: center; gap: 12px; margin-top: 8px; border: 1px solid var(--line); border-radius: 99px; padding: 3px; }
+    .qty button { width: 26px; height: 26px; border-radius: 50%; border: 0; background: var(--cream); cursor: pointer; font-size: 15px; font-weight: 700; }
+    .qty span { font-size: 13px; font-weight: 600; min-width: 14px; text-align: center; color: var(--ink); }
+    .ci .tot { font-weight: 700; font-size: 15px; }
+    .d-foot { padding: 24px 28px; border-top: 1px solid var(--line); }
+    .row { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin-bottom: 8px; }
+    .row.big { font-size: 20px; font-weight: 800; color: var(--ink); margin: 14px 0 20px; }
+    .d-foot .btn { width: 100%; }
+    .toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 100px); background: var(--ink); color: #fff; padding: 14px 24px; border-radius: 999px; font-size: 14px; font-weight: 600; z-index: 400; transition: transform .3s; box-shadow: 0 14px 34px rgba(0,0,0,0.3); }
+    .toast.on { transform: translate(-50%, 0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      h1 { font-size: 56px; }
+      .hero .wrap, .loyal, .news-box { grid-template-columns: 1fr; }
+      .collage { max-width: 500px; margin: 0 auto; width: 100%; }
+      .cats, .grid { grid-template-columns: repeat(2, 1fr); }
+      .pgrid, .rgrid { grid-template-columns: 1fr; }
+      .search { display: none; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 720px) {
+      .wrap { padding: 0 20px; }
+      h1 { font-size: 44px; } h2 { font-size: 34px; } section { padding: 68px 0; }
+      .collage { height: 500px; } .pc1 { left: 0; width: 200px; } .pc2 { width: 190px; } .pc3 { left: 70px; width: 190px; } .b1 { width: 340px; height: 340px; }
+      .cats, .grid { gap: 12px; } .cat { height: 250px; padding: 20px; } .cat .em { font-size: 80px; } .cat h3 { font-size: 20px; }
+      .prod .pimg { font-size: 70px; } .prod .add { transform: none; opacity: 1; padding: 10px; font-size: 13px; }
+      .news-box { padding: 44px 24px; border-radius: 28px; } .news-box h2 { font-size: 32px; }
+      .f-top { grid-template-columns: 1fr 1fr; } .f-bot { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="announce">Free delivery over <b>£50</b> · Free returns for 60 days · Join NiCE Rewards and get <b>10% off</b> your first order</div>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap">
+    <a href="#" class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 864.3 400.99" role="img" aria-label="NiCE">
+        <style>.b{fill:#3694fd;}.k{fill:#14122b;}.w{fill:#fff;}</style>
+        <path class="b" d="M333.62,62.55c-18.86-1.19-34.4,14.35-33.21,33.21.98,15.55,13.6,28.17,29.15,29.15,18.86,1.19,34.4-14.35,33.21-33.21-.98-15.55-13.6-28.17-29.15-29.15Z"/>
+        <path class="k" d="M265.33,82.11h-50.27c-1.66,0-3,1.34-3,3v147.41c0,1.02-1.35,1.39-1.86.5L123.2,83.61c-.54-.92-1.52-1.49-2.59-1.49h-55.12c-1.66,0-3,1.34-3,3v244.74c0,1.66,1.34,3,3,3h50.27c1.66,0,3-1.34,3-3v-146.82c0-1.02,1.35-1.39,1.86-.5l87,148.84c.54.92,1.52,1.49,2.59,1.49h55.13c1.66,0,3-1.34,3-3V85.11c0-1.66-1.34-3-3-3Z"/>
+        <path class="k" d="M353.85,141.37c-7.03,1.51-14.5,2.33-22.27,2.33s-15.24-.82-22.27-2.33c-1.87-.4-3.62,1.02-3.62,2.93v185.55c0,1.66,1.34,3,3,3h45.78c1.66,0,3-1.34,3-3v-185.55c0-1.91-1.76-3.33-3.62-2.93Z"/>
+        <path class="k" d="M798.81,286.94h-104.66c-.55,0-1-.45-1-1v-54.5c0-.55.45-1,1-1h85.42c1.66,0,3-1.34,3-3v-39.91c0-1.66-1.34-3-3-3h-85.42c-.55,0-1-.45-1-1v-54.5c0-.55.45-1,1-1h104.66c1.66,0,3-1.34,3-3v-39.91c0-1.66-1.34-3-3-3h-158.92c-1.66,0-3,1.34-3,3v244.74c0,1.66,1.34,3,3,3h158.92c1.66,0,3-1.34,3-3v-39.91c0-1.66-1.34-3-3-3Z"/>
+        <path class="k" d="M601.92,239.96h-53.14c-1.44,0-2.69,1.02-2.95,2.43-2.46,13.53-7.09,24.33-13.89,32.37-7.65,9.07-18.49,13.6-32.5,13.6-10.78,0-20.05-3.29-27.81-9.89-7.76-6.59-13.74-15.89-17.95-27.9-4.2-12.01-6.31-26.25-6.31-42.73,0-16.01,1.99-30.13,5.98-42.38,3.99-12.24,9.91-21.77,17.79-28.6,7.87-6.83,17.41-10.24,28.62-10.24,12.72,0,23.07,4.24,31.04,12.71,6.99,7.43,11.82,17.39,14.51,29.87.29,1.37,1.52,2.34,2.92,2.34h52.94c1.88,0,3.29-1.71,2.95-3.56-5.27-28.79-16.07-51.06-32.42-66.79-17.14-16.48-41.12-24.72-71.95-24.72-22.42,0-41.93,5.42-58.53,16.24-16.6,10.83-29.38,26.08-38.32,45.73-8.95,19.66-13.42,42.79-13.42,69.39s4.69,51.03,14.07,70.45c9.38,19.42,22.31,34.32,38.81,44.67,16.49,10.36,35.3,15.54,56.43,15.54,20.48,0,38.05-3.88,52.71-11.65,14.66-7.77,26.52-19.01,35.57-33.73,8.49-13.79,14.42-30.34,17.79-49.63.32-1.85-1.08-3.54-2.95-3.54Z"/>
+      </svg>
+      <i></i><span>Retail</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#categories">Shop</a></li>
+      <li><a href="#products">New in</a></li>
+      <li><a href="#products">Sale</a></li>
+      <li><a href="#rewards">Rewards</a></li>
+      <li><a href="#help">Help</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search products</div>
+      <button class="cart-btn" id="open-cart" aria-label="Open basket">Basket <span class="count" id="count">0</span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="pill"><i></i>Autumn drop is live — 400+ new styles</div>
+      <h1>Shopping that <span class="u">knows you.</span></h1>
+      <p class="lead">Fashion, tech, home and beauty — picked for you, delivered tomorrow, and returned free if it's not quite right.</p>
+      <div class="hero-cta">
+        <a href="#products" class="btn btn-coral">Shop new arrivals</a>
+        <a href="#rewards" class="btn btn-out">Join NiCE Rewards</a>
+      </div>
+      <div class="hero-proof">
+        <div class="faces"><span style="background:var(--lilac)">SJ</span><span style="background:var(--mint)">MO</span><span style="background:var(--peach)">PK</span><span style="background:var(--sun)">+</span></div>
+        <div><b>4.8 ★</b> from 86,000+ happy shoppers</div>
+      </div>
+    </div>
+
+    <div class="collage" aria-hidden="true">
+      <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+      <div class="pc pc1"><div class="img">👟</div><div class="nm">Cloud Runner Trainers</div><div class="pr"><span>Footwear</span><b>£74</b></div></div>
+      <div class="pc pc2"><div class="img">🎧</div><div class="nm">Studio Headphones</div><div class="pr"><span>Tech</span><b>£89</b></div></div>
+      <div class="pc pc3"><div class="img">🕯️</div><div class="nm">Amber Candle</div><div class="pr"><span>Home</span><b>£18</b></div></div>
+      <div class="sticker"><div><b>-20%</b>this week</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Free delivery over £50</span><span>Next-day dispatch</span><span>Free 60-day returns</span><span>Earn points on every order</span><span>Click &amp; collect in 2 hours</span>
+    <span>Free delivery over £50</span><span>Next-day dispatch</span><span>Free 60-day returns</span><span>Earn points on every order</span><span>Click &amp; collect in 2 hours</span>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section id="categories">
+  <div class="wrap">
+    <div class="head-row">
+      <div><div class="kicker">Shop by category</div><h2>Find your thing.</h2></div>
+      <p class="sub" style="margin:0;">Four worlds, one basket. Mix and match and everything ships together.</p>
+    </div>
+    <div class="cats">
+      <a class="cat c1" data-filter="fashion" href="#products"><span class="em">👗</span><h3>Fashion</h3><p>Clothing, shoes &amp; bags</p><span class="go">→</span></a>
+      <a class="cat c2" data-filter="tech" href="#products"><span class="em">🎧</span><h3>Tech</h3><p>Audio, wearables &amp; more</p><span class="go">→</span></a>
+      <a class="cat c3" data-filter="home" href="#products"><span class="em">🛋️</span><h3>Home</h3><p>Decor, kitchen &amp; light</p><span class="go">→</span></a>
+      <a class="cat c4" data-filter="beauty" href="#products"><span class="em">🧴</span><h3>Beauty</h3><p>Skin, hair &amp; wellbeing</p><span class="go">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products-sec" id="products">
+  <div class="wrap">
+    <div class="head-row">
+      <div><div class="kicker">New &amp; popular</div><h2>This week's favourites.</h2></div>
+      <div class="chips" id="chips">
+        <button class="chip on" data-f="all">All</button>
+        <button class="chip" data-f="fashion">Fashion</button>
+        <button class="chip" data-f="tech">Tech</button>
+        <button class="chip" data-f="home">Home</button>
+        <button class="chip" data-f="beauty">Beauty</button>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<!-- PROMISE -->
+<section class="promise" id="help">
+  <div class="wrap">
+    <div class="kicker" style="color:var(--sun);">Our promise</div>
+    <h2>Easy, from basket to doorstep.</h2>
+    <p class="sub">We obsess over the boring bits so buying — and returning — never feels like a chore.</p>
+    <div class="pgrid">
+      <div class="pcard"><div class="ic" style="background:var(--sun);">🚚</div><h3>Next-day delivery</h3><p>Order by 9pm for tomorrow, or choose a one-hour slot. Track every step live in the app.</p><div class="big">Free over £50</div></div>
+      <div class="pcard"><div class="ic" style="background:var(--mint);">↩️</div><h3>Returns, sorted</h3><p>Print-free QR returns at 5,000+ drop-off points. Refunds land within 24 hours of scanning.</p><div class="big">60 days</div></div>
+      <div class="pcard"><div class="ic" style="background:var(--coral);">💬</div><h3>Help in seconds</h3><p>Our assistant answers orders, sizing and returns instantly — and brings in a human whenever you want one.</p><div class="big">24/7</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- LOYALTY -->
+<section id="rewards">
+  <div class="wrap loyal">
+    <div>
+      <div class="kicker">NiCE Rewards</div>
+      <h2>The more you shop, the more it gives back.</h2>
+      <p class="sub">Free to join. Points on every order, early access to drops, and perks that are actually worth having.</p>
+      <ul class="perks">
+        <li><div class="n">1</div><div><b>Earn on everything</b><span>1 point for every £1 spent, plus bonus points on your birthday.</span></div></li>
+        <li><div class="n">2</div><div><b>Unlock free delivery</b><span>Reach Gold and every order ships free — no minimum spend.</span></div></li>
+        <li><div class="n">3</div><div><b>Shop drops first</b><span>Members get a 24-hour head start on every new collection.</span></div></li>
+      </ul>
+      <a href="#" class="btn btn-ink" style="margin-top:32px;">Join for free</a>
+    </div>
+    <div class="member" aria-hidden="true">
+      <div class="top"><span>NiCE Rewards</span><span class="tier">Silver member</span></div>
+      <div class="pts">1,440 <small>points</small></div>
+      <div class="nxt">560 points to Gold — free delivery on every order</div>
+      <div class="bar"><i></i></div>
+      <div class="who">Sarah Jones <span>· Member since 2024</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews">
+  <div class="wrap">
+    <div class="head-row"><div><div class="kicker">Reviews</div><h2>Loved by real shoppers.</h2></div></div>
+    <div class="rgrid">
+      <div class="rev"><div class="st">★★★★★</div><p>“Ordered at 8pm, in my hands by lunchtime. The trainers fit perfectly and returns would've been painless anyway.”</p><div class="by"><div class="av">SJ</div><div>Sarah J.<span>Manchester · Verified buyer</span></div></div></div>
+      <div class="rev"><div class="st">★★★★★</div><p>“The assistant sorted a wrong-size order in about a minute. Genuinely the easiest return I've ever done.”</p><div class="by"><div class="av">MO</div><div>Marcus O.<span>London · Verified buyer</span></div></div></div>
+      <div class="rev"><div class="st">★★★★★</div><p>“Rewards points actually add up. I got free delivery on my whole Christmas shop by November.”</p><div class="by"><div class="av">PK</div><div>Priya K.<span>Birmingham · Verified buyer</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<div class="news">
+  <div class="wrap">
+    <div class="news-box">
+      <div>
+        <h2>Get 10% off your first order.</h2>
+        <p>Join the list for early access to drops, member-only offers and a little treat in your inbox.</p>
+      </div>
+      <div>
+        <form class="form" id="nl"><input type="email" id="em" placeholder="Your email address" required aria-label="Email address"/><button class="btn btn-ink" type="submit">Sign me up</button></form>
+        <div class="form-msg" id="nl-msg"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="f-top">
+      <div class="f-brand">
+        <a href="#" class="logo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 864.3 400.99" role="img" aria-label="NiCE">
+            <path class="b" d="M333.62,62.55c-18.86-1.19-34.4,14.35-33.21,33.21.98,15.55,13.6,28.17,29.15,29.15,18.86,1.19,34.4-14.35,33.21-33.21-.98-15.55-13.6-28.17-29.15-29.15Z"/>
+            <path class="w" d="M265.33,82.11h-50.27c-1.66,0-3,1.34-3,3v147.41c0,1.02-1.35,1.39-1.86.5L123.2,83.61c-.54-.92-1.52-1.49-2.59-1.49h-55.12c-1.66,0-3,1.34-3,3v244.74c0,1.66,1.34,3,3,3h50.27c1.66,0,3-1.34,3-3v-146.82c0-1.02,1.35-1.39,1.86-.5l87,148.84c.54.92,1.52,1.49,2.59,1.49h55.13c1.66,0,3-1.34,3-3V85.11c0-1.66-1.34-3-3-3Z"/>
+            <path class="w" d="M353.85,141.37c-7.03,1.51-14.5,2.33-22.27,2.33s-15.24-.82-22.27-2.33c-1.87-.4-3.62,1.02-3.62,2.93v185.55c0,1.66,1.34,3,3,3h45.78c1.66,0,3-1.34,3-3v-185.55c0-1.91-1.76-3.33-3.62-2.93Z"/>
+            <path class="w" d="M798.81,286.94h-104.66c-.55,0-1-.45-1-1v-54.5c0-.55.45-1,1-1h85.42c1.66,0,3-1.34,3-3v-39.91c0-1.66-1.34-3-3-3h-85.42c-.55,0-1-.45-1-1v-54.5c0-.55.45-1,1-1h104.66c1.66,0,3-1.34,3-3v-39.91c0-1.66-1.34-3-3-3h-158.92c-1.66,0-3,1.34-3,3v244.74c0,1.66,1.34,3,3,3h158.92c1.66,0,3-1.34,3-3v-39.91c0-1.66-1.34-3-3-3Z"/>
+            <path class="w" d="M601.92,239.96h-53.14c-1.44,0-2.69,1.02-2.95,2.43-2.46,13.53-7.09,24.33-13.89,32.37-7.65,9.07-18.49,13.6-32.5,13.6-10.78,0-20.05-3.29-27.81-9.89-7.76-6.59-13.74-15.89-17.95-27.9-4.2-12.01-6.31-26.25-6.31-42.73,0-16.01,1.99-30.13,5.98-42.38,3.99-12.24,9.91-21.77,17.79-28.6,7.87-6.83,17.41-10.24,28.62-10.24,12.72,0,23.07,4.24,31.04,12.71,6.99,7.43,11.82,17.39,14.51,29.87.29,1.37,1.52,2.34,2.92,2.34h52.94c1.88,0,3.29-1.71,2.95-3.56-5.27-28.79-16.07-51.06-32.42-66.79-17.14-16.48-41.12-24.72-71.95-24.72-22.42,0-41.93,5.42-58.53,16.24-16.6,10.83-29.38,26.08-38.32,45.73-8.95,19.66-13.42,42.79-13.42,69.39s4.69,51.03,14.07,70.45c9.38,19.42,22.31,34.32,38.81,44.67,16.49,10.36,35.3,15.54,56.43,15.54,20.48,0,38.05-3.88,52.71-11.65,14.66-7.77,26.52-19.01,35.57-33.73,8.49-13.79,14.42-30.34,17.79-49.63.32-1.85-1.08-3.54-2.95-3.54Z"/>
+          </svg>
+          <i></i><span>Retail</span>
+        </a>
+        <p>Fashion, tech, home and beauty — delivered fast, returned free. Shopping that knows you.</p>
+      </div>
+      <div class="f-col"><h5>Shop</h5><ul><li><a href="#">Fashion</a></li><li><a href="#">Tech</a></li><li><a href="#">Home</a></li><li><a href="#">Beauty</a></li><li><a href="#">Sale</a></li></ul></div>
+      <div class="f-col"><h5>Help</h5><ul><li><a href="#">Delivery</a></li><li><a href="#">Returns</a></li><li><a href="#">Track an order</a></li><li><a href="#">Size guides</a></li><li><a href="#">Contact us</a></li></ul></div>
+      <div class="f-col"><h5>Company</h5><ul><li><a href="#">About us</a></li><li><a href="#">Careers</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Privacy</a></li><li><a href="#">Terms</a></li></ul></div>
+    </div>
+    <div class="f-bot"><span>© 2026 NiCE Retail Ltd. All rights reserved.</span><span>Privacy · Terms · Cookies</span></div>
+  </div>
+</footer>
+
+<!-- CART -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" aria-label="Basket">
+  <div class="d-head"><h3>Your basket</h3><button class="d-x" id="close-cart" aria-label="Close basket">×</button></div>
+  <div class="ship" id="ship"></div>
+  <div class="d-items" id="items"></div>
+  <div class="d-foot" id="foot"></div>
+</aside>
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var gbp = function (n) { return '£' + n.toFixed(2).replace(/\.00$/, ''); };
+  var FREE = 50;
+
+  var P = [
+    { id: 1, n: 'Cloud Runner Trainers', c: 'fashion', e: '👟', p: 74, o: 92, bg: '#dcefff', tag: 'Sale' },
+    { id: 2, n: 'Studio Headphones',     c: 'tech',    e: '🎧', p: 89, bg: '#e9e4ff', tag: 'New' },
+    { id: 3, n: 'Linen Overshirt',       c: 'fashion', e: '👔', p: 38, bg: '#fff1bf' },
+    { id: 4, n: 'Stoneware Mug Set',     c: 'home',    e: '☕', p: 24, bg: '#ffe3d6', tag: 'New' },
+    { id: 5, n: 'Everyday Backpack',     c: 'fashion', e: '🎒', p: 62, o: 78, bg: '#e9e4ff', tag: 'Sale' },
+    { id: 6, n: 'Pulse Smartwatch',      c: 'tech',    e: '⌚', p: 129, bg: '#dcefff' },
+    { id: 7, n: 'Halo Desk Lamp',        c: 'home',    e: '💡', p: 45, bg: '#fff1bf' },
+    { id: 8, n: 'Glow Skincare Set',     c: 'beauty',  e: '🧴', p: 34, o: 42, bg: '#ffe3d6', tag: 'Sale' }
+  ];
+  var cart = {};
+
+  function renderGrid() {
+    $('grid').innerHTML = P.map(function (x) {
+      return '<article class="prod" data-c="' + x.c + '">' +
+        '<div class="pimg" style="background:' + x.bg + '">' + x.e +
+        (x.tag ? '<span class="tag' + (x.tag === 'Sale' ? ' sale' : '') + '">' + x.tag + '</span>' : '') +
+        '<button class="add" data-id="' + x.id + '">Add to basket</button></div>' +
+        '<div class="meta"><div><h4>' + x.n + '</h4><div class="cat-l">' + x.c.charAt(0).toUpperCase() + x.c.slice(1) + '</div><div class="stars">★★★★★</div></div>' +
+        '<div class="price">' + gbp(x.p) + (x.o ? '<s>' + gbp(x.o) + '</s>' : '') + '</div></div></article>';
+    }).join('');
+  }
+
+  function filter(f) {
+    document.querySelectorAll('.chip').forEach(function (c) { c.classList.toggle('on', c.dataset.f === f); });
+    document.querySelectorAll('.prod').forEach(function (p) { p.classList.toggle('hide', f !== 'all' && p.dataset.c !== f); });
+  }
+
+  function find(id) { return P.filter(function (x) { return x.id === id; })[0]; }
+
+  function renderCart() {
+    var ids = Object.keys(cart), n = 0, sub = 0;
+    ids.forEach(function (i) { n += cart[i]; sub += cart[i] * find(+i).p; });
+    $('count').textContent = n;
+
+    var left = Math.max(0, FREE - sub);
+    $('ship').innerHTML = (left > 0 ? 'You\'re <b>' + gbp(left) + '</b> away from free delivery' : '🎉 You\'ve unlocked <b>free delivery</b>') +
+      '<div class="bar"><i style="width:' + Math.min(100, sub / FREE * 100) + '%"></i></div>';
+
+    if (!ids.length) {
+      $('items').innerHTML = '<div class="empty"><span>🛍️</span>Your basket is empty.<br>Add something you love.</div>';
+      $('foot').innerHTML = '';
+      return;
+    }
+    $('items').innerHTML = ids.map(function (i) {
+      var x = find(+i);
+      return '<div class="ci"><div class="th" style="background:' + x.bg + '">' + x.e + '</div>' +
+        '<div class="in"><b>' + x.n + '</b><span>' + gbp(x.p) + ' each</span>' +
+        '<div class="qty"><button data-d="-1" data-id="' + x.id + '" aria-label="Decrease">−</button><span>' + cart[i] + '</span><button data-d="1" data-id="' + x.id + '" aria-label="Increase">+</button></div></div>' +
+        '<div class="tot">' + gbp(cart[i] * x.p) + '</div></div>';
+    }).join('');
+    var ship = sub >= FREE ? 0 : 3.99;
+    $('foot').innerHTML = '<div class="row"><span>Subtotal</span><span>' + gbp(sub) + '</span></div>' +
+      '<div class="row"><span>Delivery</span><span>' + (ship ? gbp(ship) : 'Free') + '</span></div>' +
+      '<div class="row big"><span>Total</span><span>' + gbp(sub + ship) + '</span></div>' +
+      '<button class="btn btn-coral">Checkout</button>';
+  }
+
+  var tt;
+  function toast(m) { var t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(function () { t.classList.remove('on'); }, 1800); }
+  function open(o) { document.body.classList.toggle('cart-open', o); }
+
+  document.addEventListener('click', function (e) {
+    var t = e.target;
+    var add = t.closest('.add');
+    if (add) { var id = +add.dataset.id; cart[id] = (cart[id] || 0) + 1; renderCart(); toast('Added ' + find(id).n + ' to basket'); return; }
+    var q = t.closest('[data-d]');
+    if (q) { var k = q.dataset.id; cart[k] += +q.dataset.d; if (cart[k] <= 0) delete cart[k]; renderCart(); return; }
+    var chip = t.closest('.chip'); if (chip) { filter(chip.dataset.f); return; }
+    var cat = t.closest('.cat'); if (cat) { filter(cat.dataset.filter); return; }
+  });
+  $('open-cart').addEventListener('click', function () { open(true); });
+  $('close-cart').addEventListener('click', function () { open(false); });
+  $('scrim').addEventListener('click', function () { open(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') open(false); });
+  $('nl').addEventListener('submit', function (e) { e.preventDefault(); $('nl-msg').textContent = '✓ You\'re in! Check your inbox for your 10% code.'; $('em').value = ''; });
+
+  renderGrid(); renderCart();
+})();
+</script>
+
+<!-- Webchat widget -->
+<script src="https://github.com/Cognigy/Webchat/releases/latest/download/webchat.js"></script>
+<script>
+  initWebchat(
+    "https://endpoint-trial.cognigy.ai/81b521b904969d67740201d66deefce57a364f1a18ce36b7e8889740546a4250"
+  );
+</script>
+
+</body>
+</html>
